@@ -51,7 +51,7 @@ old.rst.surface("activity_space", by="gender", outside="unknown")      # a mean 
 
   <h2>What it does</h2>
   <ul class="feat">
-    <li><strong>Attach rasters by key</strong> (<code>embed</code>): catalogue, file-name pattern, folder, path column. Unmatched rows and unused files are reported, never silently dropped.</li>
+    <li><strong>Attach rasters by key</strong> (<code>embed</code>): catalogue, file-name pattern, folder, path column. Unmatched rows and unused files are reported, never silently dropped. </li>
     <li><strong>Lazy.</strong> The table holds references and metadata; pixels are read only for the rows an operation needs.</li>
     <li><strong>Rasters with different extents</strong> are aligned with strict, explained rules (<code>reproject=</code>, <code>resampling=</code>, <code>snap=</code> are opt-in).</li>
     <li><strong>Zero or unknown?</strong> Operations across entities make you state what a cell outside a raster means.</li>
