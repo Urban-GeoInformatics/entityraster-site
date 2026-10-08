@@ -563,17 +563,19 @@ It has the same statistics as the column accessor, but returns single numbers.</
 <span class="kn">import</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">er</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="kn">import</span> <span class="n">synth</span>
 
+<span class="c1"># Build a small synthetic example (100 people) and attach one raster per person, as in Getting started</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">make_dataset</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">survey</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">,</span> <span class="s2">"path"</span><span class="p">]))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"person_id"</span><span class="p">:</span> <span class="s2">"uid"</span><span class="p">})</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">"rasters"</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:05d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">)</span>
 
+<span class="c1"># The raster of person 20, as a reference to its file</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">]</span>
 <span class="n">p</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RasterRef(href='/var/folders/d5/hzj_s3dn4gj_pdr3911r_qc00000gn/T/tmpsqg0hfdx/rasters/p00020.tif', band=1, backend='geotiff', crs='EPSG:3067', transform=(50.0, 0.0, 393650.0, 0.0, -50.0, 6664400.0), width=54, height=52, dtype='float32', nodata=-9999.0, params=None)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RasterRef(href='/var/folders/d5/hzj_s3dn4gj_pdr3911r_qc00000gn/T/tmpa2clge2t/rasters/p00020.tif', band=1, backend='geotiff', crs='EPSG:3067', transform=(50.0, 0.0, 393650.0, 0.0, -50.0, 6664400.0), width=54, height=52, dtype='float32', nodata=-9999.0, params=None)
 </pre></div>
 </div>
 </div>
@@ -582,7 +584,8 @@ It has the same statistics as the column accessor, but returns single numbers.</
 <h2>Information (no pixels are read)<a class="headerlink" href="#information-no-pixels-are-read" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">res</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">crs</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extent, cell size, rows and columns, and coordinate system, all taken from the file header</span>
+<span class="n">p</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">res</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">crs</span>
 </pre></div>
 </div>
 </div>
@@ -600,7 +603,8 @@ It has the same statistics as the column accessor, but returns single numbers.</
 <h2>Statistics<a class="headerlink" href="#statistics" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">"mean"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">"sum"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="s2">"max"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s2">"min"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">min</span><span class="p">()}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reductions over the valid cells; each returns one number</span>
+<span class="p">{</span><span class="s2">"mean"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">"sum"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="s2">"max"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s2">"min"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">min</span><span class="p">()}</span>
 </pre></div>
 </div>
 </div>
@@ -617,7 +621,8 @@ It has the same statistics as the column accessor, but returns single numbers.</
 raster’s own maximum, which is how a “high-exposure area” is defined:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">centroid</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Area above half of the maximum in km² (m² divided by 1e6), and the value-weighted centre of the raster</span>
+<span class="n">p</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">centroid</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -635,7 +640,9 @@ those cells are simply not part of it. Count them as zero if you really want tha
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">valid</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>                                      <span class="c1"># a masked NumPy array</span>
+<span class="c1"># Count the cells that have a value, out of all cells in the grid</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"valid cells:"</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">valid</span><span class="o">.</span><span class="n">count</span><span class="p">()),</span> <span class="s2">"of"</span><span class="p">,</span> <span class="n">valid</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="c1"># The default ignores nodata cells; nodata="zero" counts them as 0, which lowers the mean</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"mean ignoring nodata  :"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">3</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"mean counting them as 0:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nodata</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
 </pre></div>
@@ -659,7 +666,8 @@ big that arbitrary box happens to be. Across several entities, the meaning of an
 <h2>Pixels<a class="headerlink" href="#pixels" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Array shape (rows, columns) and its type: a masked array hides the nodata cells</span>
+<span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span>
 </pre></div>
 </div>
 </div>
@@ -671,7 +679,8 @@ big that arbitrary box happens to be. Across several entities, the meaning of an
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span><span class="o">.</span><span class="n">dims</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The same pixels as an xarray DataArray with coordinates; show its dimension names</span>
+<span class="n">p</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span><span class="o">.</span><span class="n">dims</span>
 </pre></div>
 </div>
 </div>
@@ -683,7 +692,8 @@ big that arbitrary box happens to be. Across several entities, the meaning of an
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s2">"viridis"</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"value"</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Quick map of the raster with a colour bar</span>
+<span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s2">"viridis"</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"value"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -697,9 +707,12 @@ big that arbitrary box happens to be. Across several entities, the meaning of an
 <p>If a row has no raster, <code class="docutils literal notranslate"><span class="pre">gdf.loc[uid,</span> <span class="pre">column]</span></code> is <code class="docutils literal notranslate"><span class="pre">er.MISSING</span></code>: a NaN for which <code class="docutils literal notranslate"><span class="pre">pd.isna</span></code> is true. Statistics return NaN, so a loop over rows needs no special case.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Work on a copy so that the table used elsewhere on this page is unchanged</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1"># Remove person 20's raster; the cell becomes a missing value</span>
 <span class="n">g</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">]</span>
+<span class="c1"># The missing raster behaves like NaN: pd.isna is True and statistics return NaN instead of failing</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 </div>

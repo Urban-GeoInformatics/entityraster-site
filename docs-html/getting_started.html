@@ -552,8 +552,11 @@ and one activity-space raster each. In your own work the table would be your sur
 <span class="kn">import</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">er</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="kn">import</span> <span class="n">synth</span>
 
+<span class="c1"># Write 200 synthetic people and their rasters into a temporary folder (seed makes it reproducible)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">make_dataset</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="n">n</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>           <span class="c1"># creates the example files</span>
+<span class="c1"># Keep only the survey attributes and call the id column "uid"; the raster and geometry columns are dropped on purpose</span>
 <span class="n">survey</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">,</span> <span class="s2">"path"</span><span class="p">]))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"person_id"</span><span class="p">:</span> <span class="s2">"uid"</span><span class="p">})</span>
+<span class="c1"># The folder that holds one GeoTIFF per person</span>
 <span class="n">rasters</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">"rasters"</span>                                      <span class="c1"># a folder with p00000.tif, p00001.tif, ...</span>
 
 <span class="n">survey</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -629,7 +632,8 @@ and one activity-space raster each. In your own work the table would be your sur
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">sorted</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">rasters</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.tif"</span><span class="p">))[:</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The first three file names in the folder</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">rasters</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.tif"</span><span class="p">))[:</span><span class="mi">3</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -645,7 +649,8 @@ and one activity-space raster each. In your own work the table would be your sur
 <p><code class="xref py py-func docutils literal notranslate"><span class="pre">entityraster.embed()</span></code> joins the files to the table <strong>by id</strong> (never by row position):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">rasters</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:05d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Match each file to its row by id: the pattern turns uid 200 into p00200.tif, then index the result by uid</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">rasters</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:05d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">)</span>
 <span class="n">gdf</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -738,7 +743,8 @@ and one activity-space raster each. In your own work the table would be your sur
 <strong>extent of each raster</strong>. Anything that did not match is reported:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">gdf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"embed_report"</span><span class="p">][</span><span class="s2">"unmatched_rows"</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Class, name of the geometry column, and the number of survey rows that found no raster</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">gdf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"embed_report"</span><span class="p">][</span><span class="s2">"unmatched_rows"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -754,20 +760,23 @@ and one activity-space raster each. In your own work the table would be your sur
 <h2>3. One person<a class="headerlink" href="#one-person" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Selecting one cell of the raster column gives a reference to that person's file, not an array</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">]</span>
 <span class="n">p</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RasterRef(href='/var/folders/d5/hzj_s3dn4gj_pdr3911r_qc00000gn/T/tmpbcvqw_nk/rasters/p00020.tif', band=1, backend='geotiff', crs='EPSG:3067', transform=(50.0, 0.0, 382350.0, 0.0, -50.0, 6684000.0), width=90, height=85, dtype='float32', nodata=-9999.0, params=None)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RasterRef(href='/var/folders/d5/hzj_s3dn4gj_pdr3911r_qc00000gn/T/tmpnazfle0x/rasters/p00020.tif', band=1, backend='geotiff', crs='EPSG:3067', transform=(50.0, 0.0, 382350.0, 0.0, -50.0, 6684000.0), width=90, height=85, dtype='float32', nodata=-9999.0, params=None)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"mean value (valid cells):"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">3</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is the first operation that reads pixels; cells with no value (nodata) are ignored</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"mean value (valid cells):"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">3</span><span class="p">))</span>
+<span class="c1"># Area of cells above 50% of this person's own maximum, converted from m² to km²</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"area above half of this person's maximum (km²):"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s2">"viridis"</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"exposure"</span><span class="p">);</span>
 </pre></div>
@@ -787,8 +796,10 @@ area above half of this person's maximum (km²): 9.42
 <p>Methods on the column return a Series that lines up with the table, so you can assign it straight to a new column:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span><span class="p">[</span><span class="s2">"area_km2"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># One value per person, computed for the whole column at once and aligned to the table by index</span>
+<span class="n">gdf</span><span class="p">[</span><span class="s2">"area_km2"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span>
 <span class="n">gdf</span><span class="p">[</span><span class="s2">"mean_exposure"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="c1"># Compare groups with ordinary pandas; observed=True skips unused categories</span>
 <span class="n">gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"gender"</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">True</span><span class="p">)[[</span><span class="s2">"area_km2"</span><span class="p">,</span> <span class="s2">"mean_exposure"</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -850,7 +861,8 @@ area above half of this person's maximum (km²): 9.42
 <h2>5. Filters keep the rasters attached<a class="headerlink" href="#filters-keep-the-rasters-attached" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">old</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">gdf</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ordinary row filtering; the selected rows keep their raster references</span>
+<span class="n">old</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">gdf</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">]</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">),</span> <span class="n">old</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -868,7 +880,8 @@ area above half of this person's maximum (km²): 9.42
 (they were never there) or <code class="docutils literal notranslate"><span class="pre">&quot;unknown&quot;</span></code> (we have no information). See <a class="reference internal" href="user_guide/concepts.html"><span class="doc">Concepts</span></a> for why this matters.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span> <span class="o">=</span> <span class="n">old</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">"gender"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Stack the rasters of each gender onto a common grid and average them; cells outside a raster are 'unknown'</span>
+<span class="n">cube</span> <span class="o">=</span> <span class="n">old</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">"gender"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">)</span>
 <span class="n">cube</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -881,7 +894,8 @@ area above half of this person's maximum (km²): 9.42
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s2">"female"</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s2">"viridis"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show the mean surface of the women in the filtered table; vmin=0 fixes the colour scale</span>
+<span class="n">cube</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s2">"female"</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s2">"viridis"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -895,22 +909,26 @@ area above half of this person's maximum (km²): 9.42
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="c1"># A scratch folder for the output files</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span>
 <span class="n">er</span><span class="o">.</span><span class="n">to_geoparquet</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">out</span> <span class="o">/</span> <span class="s2">"people.parquet"</span><span class="p">)</span>             <span class="c1"># rasters stay as references; only the table is written</span>
+<span class="c1"># Reading it back restores the raster column from the stored references</span>
 <span class="n">back</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">read_geoparquet</span><span class="p">(</span><span class="n">out</span> <span class="o">/</span> <span class="s2">"people.parquet"</span><span class="p">)</span>
 <span class="n">back</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">back</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;entityraster.dtype.RasterDtype at 0x10dded280&gt;, 200)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;entityraster.dtype.RasterDtype at 0x12c90fda0&gt;, 200)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">er</span><span class="o">.</span><span class="n">to_geotiff</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s2">"female"</span><span class="p">),</span> <span class="n">out</span> <span class="o">/</span> <span class="s2">"mean_surface_women_60plus.tif"</span><span class="p">)</span>     <span class="c1"># opens in QGIS / ArcGIS</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write the group surface as a single GeoTIFF</span>
+<span class="n">er</span><span class="o">.</span><span class="n">to_geotiff</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s2">"female"</span><span class="p">),</span> <span class="n">out</span> <span class="o">/</span> <span class="s2">"mean_surface_women_60plus.tif"</span><span class="p">)</span>     <span class="c1"># opens in QGIS / ArcGIS</span>
+<span class="c1"># List what was written</span>
 <span class="nb">sorted</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">iterdir</span><span class="p">())</span>
 </pre></div>
 </div>

@@ -550,16 +550,18 @@ pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"enti
 </div>
 <section id="from-source">
 <h2>From source<a class="headerlink" href="#from-source" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Urban-GeoInformatics/entityraster
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the source and install it with its development environment</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Urban-GeoInformatics/entityraster
 <span class="nb">cd</span><span class="w"> </span>entityraster
 uv<span class="w"> </span>sync<span class="w">            </span><span class="c1"># or: pip install -e ".[docs]"</span>
-uv<span class="w"> </span>run<span class="w"> </span>pytest
+uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w">          </span><span class="c1"># run the test suite</span>
 </pre></div>
 </div>
 </section>
 <section id="build-these-docs-locally">
 <h2>Build these docs locally<a class="headerlink" href="#build-these-docs-locally" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>docs
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install the documentation dependencies, then build the HTML pages into docs/_build/html</span>
+uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>docs
 uv<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs<span class="w"> </span>docs/_build/html
 </pre></div>
 </div>

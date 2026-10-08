@@ -565,17 +565,21 @@ DataFrame, not a file format and not a new class: a table is a GeoRasterFrame if
 <span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_origin</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">er</span>
 
+<span class="c1"># A scratch folder for the example rasters</span>
 <span class="n">tmp</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""A tiny 4x4 raster with 10 m cells whose upper-left corner is (x0, y0)."""</span>
+    <span class="c1"># Georeferenced GeoTIFF in EPSG:3067 (metres); -9999 marks cells with no value</span>
     <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">"GTiff"</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">,</span>
                        <span class="n">crs</span><span class="o">=</span><span class="s2">"EPSG:3067"</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">from_origin</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">nodata</span><span class="o">=-</span><span class="mi">9999</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
         <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">tmp</span> <span class="o">/</span> <span class="n">name</span><span class="p">)</span>
 
+<span class="c1"># Three people, each with the path of one raster: Anna and Ben overlap partly, Cleo lies below Anna</span>
 <span class="n">people</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Anna"</span><span class="p">,</span> <span class="s2">"Ben"</span><span class="p">,</span> <span class="s2">"Cleo"</span><span class="p">],</span>
                        <span class="s2">"path"</span><span class="p">:</span> <span class="p">[</span><span class="n">write</span><span class="p">(</span><span class="s2">"anna.tif"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">write</span><span class="p">(</span><span class="s2">"ben.tif"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">write</span><span class="p">(</span><span class="s2">"cleo.tif"</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)]})</span>
+<span class="c1"># Attach the rasters using the path column; the new column holds references, not pixels</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">path_col</span><span class="o">=</span><span class="s2">"path"</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"raster"</span><span class="p">)</span>
 <span class="n">gdf</span>
 </pre></div>
@@ -634,12 +638,13 @@ DataFrame, not a file format and not a new class: a table is a GeoRasterFrame if
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">er</span><span class="o">.</span><span class="n">is_georasterframe</span><span class="p">(</span><span class="n">gdf</span><span class="p">),</span> <span class="n">gdf</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">raster_columns</span><span class="p">,</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The table is recognised by its raster column: flag, list of raster columns, and the column dtype</span>
+<span class="n">er</span><span class="o">.</span><span class="n">is_georasterframe</span><span class="p">(</span><span class="n">gdf</span><span class="p">),</span> <span class="n">gdf</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">raster_columns</span><span class="p">,</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(True, ['raster'], &lt;entityraster.dtype.RasterDtype at 0x12b100a10&gt;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(True, ['raster'], &lt;entityraster.dtype.RasterDtype at 0x11f313560&gt;)
 </pre></div>
 </div>
 </div>
@@ -656,7 +661,8 @@ nodata). The pixels stay in the GeoTIFF. That has three consequences:</p>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># READS counts pixel reads, so we can see when files are actually opened</span>
+<span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">gdf</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">bounds</span><span class="p">()</span>                       <span class="c1"># metadata only</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"pixel reads after metadata:"</span><span class="p">,</span> <span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>
 <span class="n">gdf</span><span class="p">[</span><span class="n">gdf</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"Ben"</span><span class="p">][</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>    <span class="c1"># reads the two remaining rasters</span>
@@ -750,8 +756,10 @@ What is the <em>average</em> exposure at that cell?</p>
 empty cells with 0 or NaN). <code class="docutils literal notranslate"><span class="pre">entityraster</span></code> makes you say it, for every operation that combines several rasters:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zero</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mean surface over the common grid, once treating empty cells as 0 and once as missing information</span>
+<span class="n">zero</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)</span>
 <span class="n">unknown</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">)</span>
+<span class="c1"># Compare the same cell (top row, third column) under both choices: 1.0 versus 1.5</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"outside='zero'   :"</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">zero</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"outside='unknown':"</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">unknown</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
 </pre></div>
@@ -766,7 +774,8 @@ outside='unknown': 1.5
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Leaving out `outside` is an error by design; the message explains the choice</span>
+<span class="k">try</span><span class="p">:</span>
     <span class="n">gdf</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>

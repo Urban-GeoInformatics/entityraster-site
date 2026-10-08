@@ -565,19 +565,21 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">er</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="kn">import</span> <span class="n">synth</span>
 
+<span class="c1"># synthetic dataset of 60 people, written to a temporary folder</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">make_dataset</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="n">n</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">people</span>
 <span class="n">gdf</span><span class="p">[</span><span class="s2">"home_range"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">extent</span><span class="p">(</span><span class="s2">"hull"</span><span class="p">)</span>        <span class="c1"># a second geometry column, saved too</span>
 
 <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s2">"people.parquet"</span>
-<span class="n">er</span><span class="o">.</span><span class="n">to_geoparquet</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-<span class="n">back</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">read_geoparquet</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">er</span><span class="o">.</span><span class="n">to_geoparquet</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>           <span class="c1"># write the table; only raster references and metadata are stored</span>
+<span class="n">back</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">read_geoparquet</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>        <span class="c1"># read it back, restoring the raster dtype and geometry columns</span>
+<span class="c1"># check the dtype, the extra geometry column, and that every raster reference matches the original</span>
 <span class="n">back</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="s2">"home_range"</span> <span class="ow">in</span> <span class="n">back</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="p">(</span><span class="n">back</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">array</span> <span class="o">==</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;entityraster.dtype.RasterDtype at 0x13aa0dc70&gt;, True, np.True_)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;entityraster.dtype.RasterDtype at 0x1123a9be0&gt;, True, np.True_)
 </pre></div>
 </div>
 </div>
@@ -586,6 +588,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="c1"># the metadata comes from the parquet file, so both counters stay at 0 (no GeoTIFF is opened)</span>
 <span class="n">b2</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">read_geoparquet</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 <span class="n">b2</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">bounds</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">total</span><span class="p">,</span> <span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">metadata_calls</span>
 </pre></div>
@@ -606,13 +609,13 @@
 <p>The file is an ordinary GeoParquet. Software that does not know <code class="docutils literal notranslate"><span class="pre">entityraster</span></code> (plain GeoPandas, DuckDB, QGIS) reads the raster column as a <strong>struct</strong> of the stored fields:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plain</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plain</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>                <span class="c1"># plain GeoPandas, without entityraster's raster dtype</span>
 <span class="n">plain</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'href': '/var/folders/d5/hzj_s3dn4gj_pdr3911r_qc00000gn/T/tmpiiwa0yp_/rasters/p00000.tif',
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'href': '/var/folders/d5/hzj_s3dn4gj_pdr3911r_qc00000gn/T/tmplt19vvor/rasters/p00000.tif',
  'band': 1,
  'backend': 'geotiff',
  'crs': 'EPSG:3067',
@@ -640,9 +643,11 @@ paths consistently). Check a table with <code class="docutils literal notranslat
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="c1"># mean surface per gender, as an xarray array with one layer per group</span>
 <span class="n">cube</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">"gender"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">)</span>
+<span class="c1"># write the cube to a multi-band GeoTIFF; the layer names become the band descriptions</span>
 <span class="n">tif</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">to_geotiff</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s2">"by_gender.tif"</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tif</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tif</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>               <span class="c1"># read the file back to check what was written</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">descriptions</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">nodata</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -659,8 +664,9 @@ paths consistently). Check a table with <code class="docutils literal notranslat
 <p>A raster does not have to be a file. A <code class="xref py py-class docutils literal notranslate"><span class="pre">DerivedBackend</span></code> raster is defined by a function and its parameters and computed when read. The reference keeps that definition (provenance):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">derived</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">derived_activity_space</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">ref</span> <span class="o">=</span> <span class="n">derived</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a raster column whose pixels are computed from a function, not read from a file</span>
+<span class="n">derived</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">derived_activity_space</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">derived</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                               <span class="c1"># the reference to the first raster</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span> <span class="s2">"|"</span><span class="p">,</span> <span class="n">ref</span><span class="o">.</span><span class="n">params</span><span class="p">[:</span><span class="mi">70</span><span class="p">],</span> <span class="s2">"..."</span><span class="p">)</span>
 <span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">ref</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">er</span><span class="o">.</span><span class="n">READS</span><span class="o">.</span><span class="n">materializations</span>
