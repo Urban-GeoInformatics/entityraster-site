@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>entityraster</title>
+<meta name="description" content="Raster-valued attributes for GeoPandas: one raster per row, with explicit zero-vs-unknown semantics.">
+<style>
+  :root { --bg:#ffffff; --fg:#1b1f24; --muted:#586069; --line:#d8dee4; --accent:#0b6e4f; --code:#f4f6f8; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e1116; --fg:#e6edf3; --muted:#9aa4af; --line:#30363d; --accent:#4cc38a; --code:#161b22; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 52rem; margin: 0 auto; padding: 3rem 1rem 4rem; }
+  h1 { font-size: 2.4rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
+  .tag { color: var(--muted); font-size: 1.15rem; margin: 0 0 1.5rem; }
+  h2 { font-size: 1.25rem; margin: 2.5rem 0 .5rem; }
+  a { color: var(--accent); }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 8px; padding: 1rem; overflow-x: auto; font-size: .9rem; line-height: 1.5; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .links { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.5rem 0; padding: 0; list-style: none; }
+  .links a { display:inline-block; padding:.45rem .9rem; border:1px solid var(--line); border-radius:999px; text-decoration:none; font-weight:600; }
+  .links a:hover { border-color: var(--accent); }
+  ul.feat { padding-left: 1.2rem; } ul.feat li { margin: .35rem 0; }
+  .note { color: var(--muted); font-size: .92rem; border-left: 3px solid var(--line); padding-left: .8rem; margin-top: 2rem; }
+  footer { color: var(--muted); font-size: .88rem; margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>entityraster</h1>
+  <p class="tag">Raster-valued attributes for GeoPandas. One raster per row, handled like any other column.</p>
+
+  <ul class="links">
+    <li><a href="https://entityraster.readthedocs.io">Documentation</a></li>
+    <li><a href="https://github.com/Urban-GeoInformatics/entityraster">GitHub</a></li>
+    <li><a href="https://pypi.org/project/entityraster/">PyPI</a></li>
+  </ul>
+
+  <p>Keep a person's activity space, a site's suitability surface or a parcel's land-cover map in a table, next to the entity's other attributes. Filter, group, join and save it
+  the way you already do with tables. We call such a table a <strong>GeoRasterFrame</strong>.</p>
+
+<pre><code>import entityraster as er
+
+gdf = er.embed(people, "rasters/", on="uid", pattern="p{uid:05d}.tif",
+               column="activity_space", index="uid")
+
+gdf.loc[200, "activity_space"].mean()                                  # one person's raster
+gdf["area_km2"] = gdf["activity_space"].raster.area(0.5, relative=True) / 1e6
+old = gdf[gdf["age"] &gt; 60]                                             # rasters follow the filter
+old.rst.surface("activity_space", by="gender", outside="unknown")      # a mean surface per group</code></pre>
+
+  <h2>What it does</h2>
+  <ul class="feat">
+    <li><strong>Attach rasters by key</strong> (<code>embed</code>): catalogue, file-name pattern, folder, path column. Unmatched rows and unused files are reported, never silently dropped.</li>
+    <li><strong>Lazy.</strong> The table holds references and metadata; pixels are read only for the rows an operation needs.</li>
+    <li><strong>Rasters with different extents</strong> are aligned with strict, explained rules (<code>reproject=</code>, <code>resampling=</code>, <code>snap=</code> are opt-in).</li>
+    <li><strong>Zero or unknown?</strong> Operations across entities make you state what a cell outside a raster means.</li>
+    <li><strong>Weighted analysis and land use:</strong> exposure weighted by each entity's raster, class shares per entity and per polygon.</li>
+    <li><strong>Plain pandas:</strong> filter, groupby, merge, sjoin and GeoParquet keep working; export surfaces as GeoTIFF for QGIS and ArcGIS.</li>
+  </ul>
+
+  <h2>Install</h2>
+<pre><code>pip install entityraster</code></pre>
+  <p>Python 3.11 or newer. BSD 3-Clause licence.</p>
+
+  <p class="note">Status: pre-release (0.1). Links above go live when the documentation project and the first release are published.</p>
+
+  <footer>Urban Geoinformatics &middot; <a href="https://github.com/Urban-GeoInformatics">github.com/Urban-GeoInformatics</a></footer>
+</main>
+</body>
+</html>
