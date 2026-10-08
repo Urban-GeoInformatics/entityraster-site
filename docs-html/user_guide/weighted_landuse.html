@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Weighted analysis and land use &#8212; entityraster 0.1.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=892f40fa" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/weighted_landuse';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Alignment: rasters that do not line up" href="alignment.html" />
+    <link rel="prev" title="Combining entities: surfaces, stacks and overlap" href="across_entities.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">entityraster 0.1.0</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../comparison.html">
+    How it compares
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../faq.html">
+    FAQ and troubleshooting
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../contributing.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../citing.html">
+    Citing
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Urban-GeoInformatics/entityraster" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/entityraster/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../comparison.html">
+    How it compares
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../faq.html">
+    FAQ and troubleshooting
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../citing.html">
+    Citing
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Urban-GeoInformatics/entityraster" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/entityraster/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedding.html">Attaching rasters to a table: <code class="docutils literal notranslate"><span class="pre">embed</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_raster.html">One entity’s raster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="per_entity.html">One value per entity: the column accessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="across_entities.html">Combining entities: surfaces, stacks and overlap</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Weighted analysis and land use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment: rasters that do not line up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">Saving and loading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_and_pandas.html">Missing rasters and everyday pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defaults.html">Defaults policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending: backends and generators</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">User guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Weighted analysis and land use</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="weighted-analysis-and-land-use">
+<h1>Weighted analysis and land use<a class="headerlink" href="#weighted-analysis-and-land-use" title="Link to this heading">#</a></h1>
+<p>Two related jobs:</p>
+<ol class="arabic simple">
+<li><p><strong>How much of some environment does each entity’s raster expose them to?</strong> The entity’s raster values act as <em>weights</em>: cells they use more count more.</p></li>
+<li><p><strong>What is the composition of a land-use (categorical) raster</strong> inside each entity’s raster, or inside each polygon of another table?</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="o">,</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span><span class="o">,</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span><span class="o">,</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">er</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="kn">import</span> <span class="n">synth</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">make_dataset</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="n">n</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">people</span>
+
+<span class="c1"># A continuous environment layer (greenness 0..1, with gaps = "unknown") and, derived from it, a land-use map with 3 classes.</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">"env_green.tif"</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+    <span class="n">green</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">masked</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">profile</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">green</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="o">-</span><span class="mi">9999</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">green</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="p">[</span><span class="mf">0.33</span><span class="p">,</span> <span class="mf">0.66</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>      <span class="c1"># 1, 2, 3</span>
+<span class="n">lu_path</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">"landuse.tif"</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">lu_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="o">**</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+    <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">greenness</span><span class="p">,</span> <span class="n">landuse</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">env_green</span><span class="p">,</span> <span class="n">er</span><span class="o">.</span><span class="n">RasterRef</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lu_path</span><span class="p">))</span>
+<span class="n">landuse</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">classes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((600, 600), array([1., 2., 3.], dtype=float32))
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exposure-to-a-continuous-layer">
+<h2>Exposure to a continuous layer<a class="headerlink" href="#exposure-to-a-continuous-layer" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span><span class="p">[</span><span class="s2">"green"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">exposure</span><span class="p">(</span><span class="n">greenness</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">)</span>
+<span class="n">gdf</span><span class="p">[</span><span class="s2">"green"</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>count    150.000
+mean       0.324
+std        0.048
+min        0.164
+25%        0.296
+50%        0.321
+75%        0.352
+max        0.476
+Name: green, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">exposure</span></code> is the weighted mean of the layer: each cell’s value is multiplied by the entity’s own raster value in that cell, summed, and divided by the sum of the weights. Choose the weights with <code class="docutils literal notranslate"><span class="pre">weighting=</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">weighting</span></code></p></th>
+<th class="head"><p>weights</p></th>
+<th class="head"><p>typical use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;density&quot;</span></code> (default)</p></td>
+<td><p>the entity’s raster values</p></td>
+<td><p>exposure-weighted (a person’s use of each cell)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;binary&quot;</span></code></p></td>
+<td><p>1 where the raster value exceeds <code class="docutils literal notranslate"><span class="pre">threshold</span></code>, else 0</p></td>
+<td><p>an unweighted home range</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code></p></td>
+<td><p>1 on every valid cell</p></td>
+<td><p>the plain mean over the raster’s extent</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"density-weighted"</span><span class="p">:</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">exposure</span><span class="p">(</span><span class="n">greenness</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">),</span>
+    <span class="s2">"home range (binary)"</span><span class="p">:</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">exposure</span><span class="p">(</span><span class="n">greenness</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">,</span> <span class="n">weighting</span><span class="o">=</span><span class="s2">"binary"</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span>
+<span class="p">})</span>
+<span class="n">w</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>density-weighted</th>
+      <th>home range (binary)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>150.000</td>
+      <td>150.000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>0.324</td>
+      <td>0.324</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.048</td>
+      <td>0.048</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.164</td>
+      <td>0.166</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.296</td>
+      <td>0.296</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>0.321</td>
+      <td>0.320</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>0.352</td>
+      <td>0.351</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>0.476</td>
+      <td>0.480</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">outside=</span></code> here is about the <strong>environment</strong> layer: if the layer has gaps (or does not cover an entity’s whole raster), <code class="docutils literal notranslate"><span class="pre">&quot;unknown&quot;</span></code> drops those cells from numerator and denominator, <code class="docutils literal notranslate"><span class="pre">&quot;zero&quot;</span></code> counts them as 0.
+If the whole raster lies in a gap, the result is NaN.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"unknown"</span><span class="p">:</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">exposure</span><span class="p">(</span><span class="n">greenness</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">),</span>
+              <span class="s2">"zero"</span><span class="p">:</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">exposure</span><span class="p">(</span><span class="n">greenness</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)})</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="s2">"count"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>unknown</th>
+      <th>zero</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>150.000</td>
+      <td>150.000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>0.324</td>
+      <td>0.309</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.164</td>
+      <td>0.004</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="share-of-chosen-land-use-classes">
+<h2>Share of chosen land-use classes<a class="headerlink" href="#share-of-chosen-land-use-classes" title="Link to this heading">#</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">classes=[...]</span></code> the layer is read as categorical and the result is the <strong>weighted share of the weight</strong> that falls in those classes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span><span class="p">[</span><span class="s2">"share_class3"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">exposure</span><span class="p">(</span><span class="n">landuse</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">gdf</span><span class="p">[</span><span class="s2">"share_class3"</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>count    150.000
+mean       0.012
+std        0.028
+min        0.000
+25%        0.000
+50%        0.000
+75%        0.000
+max        0.132
+Name: share_class3, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="full-composition-per-entity">
+<h2>Full composition per entity<a class="headerlink" href="#full-composition-per-entity" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shares</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="n">landuse</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">)</span>
+<span class="n">shares</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>1.0</th>
+      <th>2.0</th>
+      <th>3.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.94</td>
+      <td>0.06</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.87</td>
+      <td>0.13</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.86</td>
+      <td>0.14</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.50</td>
+      <td>0.37</td>
+      <td>0.13</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Each row is one entity’s weighted class shares. With <code class="docutils literal notranslate"><span class="pre">outside=&quot;unknown&quot;</span></code> they sum to 1 over what the land-use map observes; with <code class="docutils literal notranslate"><span class="pre">&quot;zero&quot;</span></code> the unobserved part stays in the denominator and the shares sum to the <em>observed fraction</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zero_shares</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="n">landuse</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"unknown"</span><span class="p">:</span> <span class="n">shares</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s2">"zero"</span><span class="p">:</span> <span class="n">zero_shares</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)})</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="s2">"min"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>unknown</th>
+      <th>zero</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>min</th>
+      <td>1.0</td>
+      <td>0.010</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>1.0</td>
+      <td>0.956</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>1.0</td>
+      <td>1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="one-land-use-raster-many-polygons">
+<h2>One land-use raster, many polygons<a class="headerlink" href="#one-land-use-raster-many-polygons" title="Link to this heading">#</a></h2>
+<p>For a <em>shared</em> categorical raster against polygons (neighbourhoods, districts) use <code class="xref py py-func docutils literal notranslate"><span class="pre">entityraster.zonal_composition()</span></code>. It returns the class shares per polygon and a <code class="docutils literal notranslate"><span class="pre">coverage</span></code> column: the share of the polygon covered by valid cells.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zones</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">neighbourhoods</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"neighbourhood"</span><span class="p">)</span>
+<span class="n">comp</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">zonal_composition</span><span class="p">(</span><span class="n">landuse</span><span class="p">,</span> <span class="n">zones</span><span class="p">)</span>
+<span class="n">comp</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>1.0</th>
+      <th>2.0</th>
+      <th>3.0</th>
+      <th>coverage</th>
+    </tr>
+    <tr>
+      <th>neighbourhood</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.51</td>
+      <td>0.44</td>
+      <td>0.06</td>
+      <td>0.93</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.29</td>
+      <td>0.70</td>
+      <td>0.01</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.58</td>
+      <td>0.42</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.57</td>
+      <td>0.39</td>
+      <td>0.03</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span><span class="p">[</span><span class="s2">"coverage"</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>        <span class="c1"># polygons sticking out of the raster, or into gaps, have coverage &lt; 1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>count    20.00
+mean      0.96
+std       0.05
+min       0.81
+25%       0.93
+50%       0.97
+75%       1.00
+max       1.00
+Name: coverage, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Weight the cells with another raster (for example population) using <code class="docutils literal notranslate"><span class="pre">weights=</span></code>; it is aligned to the land-use grid with the usual rules (<a class="reference internal" href="alignment.html"><span class="doc">Alignment: rasters that do not line up</span></a>):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pollution</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">RasterRef</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">"env_pollution.tif"</span><span class="p">))</span>          <span class="c1"># stand-in for a population raster</span>
+<span class="n">er</span><span class="o">.</span><span class="n">zonal_composition</span><span class="p">(</span><span class="n">landuse</span><span class="p">,</span> <span class="n">zones</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">pollution</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>1.0</th>
+      <th>2.0</th>
+      <th>3.0</th>
+      <th>coverage</th>
+    </tr>
+    <tr>
+      <th>neighbourhood</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.53</td>
+      <td>0.43</td>
+      <td>0.04</td>
+      <td>0.93</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.31</td>
+      <td>0.68</td>
+      <td>0.01</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.60</td>
+      <td>0.40</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Shares count the cells whose <strong>centre</strong> lies in the polygon. For coarse cells and small polygons, tools that use exact partial-cell coverage (exactextract) are more precise.</p>
+</div>
+</section>
+<section id="combining-both-neighbourhood-differences-in-people-s-exposure">
+<h2>Combining both: neighbourhood differences in people’s exposure<a class="headerlink" href="#combining-both-neighbourhood-differences-in-people-s-exposure" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nb</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"neighbourhood"</span><span class="p">)[</span><span class="s2">"green"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">nb</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"mean green exposure of residents"</span><span class="p">),</span> <span class="n">comp</span><span class="p">[</span><span class="mf">3.0</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"class-3 share of the area"</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean green exposure of residents</th>
+      <th>class-3 share of the area</th>
+    </tr>
+    <tr>
+      <th>neighbourhood</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.318</td>
+      <td>0.056</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.415</td>
+      <td>0.007</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.216</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.290</td>
+      <td>0.032</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.330</td>
+      <td>0.009</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="across_entities.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Combining entities: surfaces, stacks and overlap</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="alignment.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Alignment: rasters that do not line up</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exposure-to-a-continuous-layer">Exposure to a continuous layer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#share-of-chosen-land-use-classes">Share of chosen land-use classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#full-composition-per-entity">Full composition per entity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-land-use-raster-many-polygons">One land-use raster, many polygons</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combining-both-neighbourhood-differences-in-people-s-exposure">Combining both: neighbourhood differences in people’s exposure</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/weighted_landuse.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, entityraster developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

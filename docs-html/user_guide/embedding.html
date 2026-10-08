@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Attaching rasters to a table: embed &#8212; entityraster 0.1.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=892f40fa" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/embedding';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="One entity’s raster" href="single_raster.html" />
+    <link rel="prev" title="Concepts" href="concepts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">entityraster 0.1.0</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../comparison.html">
+    How it compares
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../faq.html">
+    FAQ and troubleshooting
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../contributing.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../citing.html">
+    Citing
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Urban-GeoInformatics/entityraster" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/entityraster/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../comparison.html">
+    How it compares
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../faq.html">
+    FAQ and troubleshooting
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../citing.html">
+    Citing
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Urban-GeoInformatics/entityraster" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/entityraster/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Attaching rasters to a table: <code class="docutils literal notranslate"><span class="pre">embed</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_raster.html">One entity’s raster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="per_entity.html">One value per entity: the column accessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="across_entities.html">Combining entities: surfaces, stacks and overlap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weighted_landuse.html">Weighted analysis and land use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment: rasters that do not line up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">Saving and loading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_and_pandas.html">Missing rasters and everyday pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defaults.html">Defaults policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending: backends and generators</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">User guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Attaching rasters to a table: <code class="docutils literal notranslate"><span class="pre">embed</span></code></span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="attaching-rasters-to-a-table-embed">
+<h1>Attaching rasters to a table: <code class="docutils literal notranslate"><span class="pre">embed</span></code><a class="headerlink" href="#attaching-rasters-to-a-table-embed" title="Link to this heading">#</a></h1>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">entityraster.embed()</span></code> is the front door. It joins rasters to a table <strong>by key, never by position</strong>, tells you what did not match, and
+manages the geometry. It works with or without a geometry column.</p>
+<section id="set-up-some-example-files">
+<h2>Set up some example files<a class="headerlink" href="#set-up-some-example-files" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span><span class="o">,</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="o">,</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span><span class="o">,</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span><span class="o">,</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_origin</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">er</span>
+
+<span class="n">tmp</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">"GTiff"</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">"EPSG:3067"</span><span class="p">,</span>
+                       <span class="n">transform</span><span class="o">=</span><span class="n">from_origin</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">nodata</span><span class="o">=-</span><span class="mi">9999</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+        <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="n">folder</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">/</span> <span class="s2">"rasters"</span>
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)]:</span>
+    <span class="n">write</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"p</span><span class="si">{</span><span class="n">uid</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>          <span class="c1"># p010.tif, p020.tif, p030.tif</span>
+
+<span class="n">people</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"uid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s2">"age"</span><span class="p">:</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">70</span><span class="p">]})</span>      <span class="c1"># deliberately not in file order</span>
+<span class="n">people</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>uid</th>
+      <th>age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>30</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>10</td>
+      <td>70</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="where-the-rasters-come-from">
+<h2>Where the rasters come from<a class="headerlink" href="#where-the-rasters-come-from" title="Link to this heading">#</a></h2>
+<p>Give <strong>one</strong> of the following. In every case the result keeps the table’s rows, order and index.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 28.0%" />
+<col style="width: 72.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>You have</p></th>
+<th class="head"><p>Call</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>a file-name pattern with the id in it</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">er.embed(people,</span> <span class="pre">folder,</span> <span class="pre">on=&quot;uid&quot;,</span> <span class="pre">pattern=&quot;p{uid:03d}.tif&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>a folder (or glob, or list of files) named after the id</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">er.embed(people,</span> <span class="pre">folder,</span> <span class="pre">on=&quot;uid&quot;,</span> <span class="pre">pattern=...)</span></code> or, if the file stem <em>is</em> the id, simply <code class="docutils literal notranslate"><span class="pre">on=&quot;uid&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>a name template built from the row</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">er.embed(people,</span> <span class="pre">template=&quot;rasters/p{uid:03d}.tif&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>a catalogue table: id and path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">er.embed(people,</span> <span class="pre">catalogue)</span></code> (the join key and the path column are inferred when only one choice is possible)</p></td>
+</tr>
+<tr class="row-even"><td><p>a dict or Series mapping id to path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">er.embed(people,</span> <span class="pre">{10:</span> <span class="pre">&quot;...&quot;,</span> <span class="pre">20:</span> <span class="pre">&quot;...&quot;},</span> <span class="pre">on=&quot;uid&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>a path column already in the table</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">er.embed(people,</span> <span class="pre">path_col=&quot;path&quot;)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>a list of paths in the same order as the rows</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">er.embed(people,</span> <span class="pre">paths,</span> <span class="pre">positional=True)</span></code> (only if you are certain: matching by position is fragile)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">)</span>                <span class="c1"># pattern</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"/p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">)</span>                  <span class="c1"># template</span>
+<span class="n">catalogue</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"uid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="s2">"file"</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"p</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">.tif"</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]})</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">catalogue</span><span class="p">)</span>                                                 <span class="c1"># catalogue, nothing else needed</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="p">{</span><span class="mi">10</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"p010.tif"</span><span class="p">),</span> <span class="mi">20</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"p020.tif"</span><span class="p">),</span> <span class="mi">30</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"p030.tif"</span><span class="p">)},</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">)</span>
+<span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>                         <span class="c1"># all identical: 2, 3, 1 (the table's order)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[2.0, 3.0, 1.0], [2.0, 3.0, 1.0], [2.0, 3.0, 1.0], [2.0, 3.0, 1.0]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The five options you will use most: <code class="docutils literal notranslate"><span class="pre">on</span></code>, <code class="docutils literal notranslate"><span class="pre">pattern</span></code> or <code class="docutils literal notranslate"><span class="pre">template</span></code>, <code class="docutils literal notranslate"><span class="pre">column</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code> and <code class="docutils literal notranslate"><span class="pre">geometry</span></code>. Everything else has a safe default.</p>
+</section>
+<section id="naming-the-column-and-the-index">
+<h2>Naming the column and the index<a class="headerlink" href="#naming-the-column-and-the-index" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="s2">"activity_space"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="geometry-what-you-get">
+<h2>Geometry: what you get<a class="headerlink" href="#geometry-what-you-get" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Your table</p></th>
+<th class="head"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>has <strong>no geometry</strong> (a plain DataFrame)</p></td>
+<td><p>a GeoDataFrame whose geometry is the <strong>raster extent</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>has a geometry (points, polygons, anything)</p></td>
+<td><p>the original geometry <strong>stays the default</strong>; the raster extent is added as a second geometry column, <code class="docutils literal notranslate"><span class="pre">raster_extent</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>either of the above with <code class="docutils literal notranslate"><span class="pre">geometry=&quot;raster&quot;</span></code></p></td>
+<td><p>the raster extent becomes the default geometry; the original column is kept</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plain</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"plain table  -&gt;"</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">plain</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">"| default geometry:"</span><span class="p">,</span> <span class="n">plain</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<span class="n">homes</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">45</span><span class="p">]),</span> <span class="n">crs</span><span class="o">=</span><span class="mi">3067</span><span class="p">)</span>
+<span class="n">both</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">homes</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"with points  -&gt;"</span><span class="p">,</span> <span class="n">both</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"(kept) +"</span><span class="p">,</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">both</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">"extent"</span> <span class="ow">in</span> <span class="n">c</span><span class="p">],</span> <span class="s2">"(added)"</span><span class="p">)</span>
+
+<span class="n">swapped</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">homes</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s2">"raster"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"geometry='raster' -&gt;"</span><span class="p">,</span> <span class="n">swapped</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"| original still there:"</span><span class="p">,</span> <span class="s2">"geometry"</span> <span class="ow">in</span> <span class="n">swapped</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>plain table  -&gt; GeoDataFrame | default geometry: raster_extent
+with points  -&gt; geometry (kept) + ['raster_extent'] (added)
+geometry='raster' -&gt; raster_extent | original still there: True
+</pre></div>
+</div>
+</div>
+</div>
+<p>The extent is the raster’s bounding box by default (cheap: only headers are read). To use the real shape of the valid cells, or their convex hull
+(for example a modelled home range), pass <code class="docutils literal notranslate"><span class="pre">extent=&quot;valid&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">extent=&quot;hull&quot;</span></code>; these read the pixels once.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hull</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">homes</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="s2">"hull"</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s2">"raster"</span><span class="p">)</span>
+<span class="n">hull</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1600.0, 1600.0, 1600.0]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="when-something-does-not-match">
+<h2>When something does not match<a class="headerlink" href="#when-something-does-not-match" title="Link to this heading">#</a></h2>
+<p>Rows without a raster, files without a row, duplicate keys and unreadable files are <strong>reported</strong>, never silently dropped:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"p010.tif"</span><span class="p">),</span> <span class="mi">30</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"p030.tif"</span><span class="p">),</span> <span class="mi">99</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"p010.tif"</span><span class="p">)}</span>   <span class="c1"># 20 missing, 99 unused</span>
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">caught</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">"always"</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">partial</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">caught</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
+<span class="n">out</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"embed_report"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>embed: 1 of 3 rows have no raster (e.g. [0]), 1 raster(s) matched no row (e.g. [99])
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'n_rows': 3, 'unmatched_rows': [0], 'orphan_rasters': [99], 'n_unreadable': 0}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>          <span class="c1"># the row without a raster is an ordinary missing value</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[True, False, False]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Options for control: <code class="docutils literal notranslate"><span class="pre">how=&quot;inner&quot;</span></code> drops rows without a raster; <code class="docutils literal notranslate"><span class="pre">strict=True</span></code> turns the problem into an error; <code class="docutils literal notranslate"><span class="pre">warn=False</span></code> silences the warning
+(the report is still there); <code class="docutils literal notranslate"><span class="pre">duplicates=&quot;first&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;last&quot;</span></code> resolves repeated keys (the default <code class="docutils literal notranslate"><span class="pre">&quot;error&quot;</span></code> refuses to guess).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"p020.tif"</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"moved.tif"</span><span class="p">)</span>                          <span class="c1"># simulate a missing file</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"raise"</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/d5/hzj_s3dn4gj_pdr3911r_qc00000gn/T/ipykernel_96598/2803301216.py:3: UserWarning: embed: 1 of 3 rows have no raster (e.g. [0]), 0 raster(s) matched no row (e.g. [])
+  er.embed(people, folder, on="uid", pattern="p{uid:03d}.tif", errors="raise")
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
+    <span class="n">coerced</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"/p</span><span class="si">{uid:03d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"coerce"</span><span class="p">)</span>
+<span class="n">coerced</span><span class="p">[</span><span class="s2">"raster"</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">coerced</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"embed_report"</span><span class="p">][</span><span class="s2">"n_unreadable"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>([True, False, False], 1)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="mixed-coordinate-systems">
+<h2>Mixed coordinate systems<a class="headerlink" href="#mixed-coordinate-systems" title="Link to this heading">#</a></h2>
+<p>If the rasters use different CRS and the table has no geometry to say which one to use, <code class="docutils literal notranslate"><span class="pre">embed</span></code> asks for <code class="docutils literal notranslate"><span class="pre">crs=</span></code> for the extent geometry; with a geometry
+column the extent is converted to the table’s CRS.</p>
+</section>
+<section id="recipes">
+<h2>Recipes<a class="headerlink" href="#recipes" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># a survey and a folder of files named after the person id (the most common case)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="s2">"rasters/"</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:05d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"activity_space"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">)</span>
+
+<span class="c1"># the paths are already in the survey export</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">path_col</span><span class="o">=</span><span class="s2">"raster_file"</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"activity_space"</span><span class="p">)</span>
+
+<span class="c1"># a catalogue that lists id and path</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">catalogue</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"activity_space"</span><span class="p">)</span>
+
+<span class="c1"># keep your point geometry, add the modelled home range as a second geometry</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">survey_points</span><span class="p">,</span> <span class="s2">"rasters/"</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"uid"</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">"p</span><span class="si">{uid:05d}</span><span class="s2">.tif"</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="s2">"hull"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="concepts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Concepts</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="single_raster.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">One entity’s raster</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-some-example-files">Set up some example files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-the-rasters-come-from">Where the rasters come from</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#naming-the-column-and-the-index">Naming the column and the index</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geometry-what-you-get">Geometry: what you get</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-something-does-not-match">When something does not match</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-coordinate-systems">Mixed coordinate systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recipes">Recipes</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/embedding.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, entityraster developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

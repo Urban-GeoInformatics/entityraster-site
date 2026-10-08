@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Alignment: rasters that do not line up &#8212; entityraster 0.1.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=892f40fa" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/alignment';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Saving and loading" href="io.html" />
+    <link rel="prev" title="Weighted analysis and land use" href="weighted_landuse.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">entityraster 0.1.0</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../comparison.html">
+    How it compares
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../faq.html">
+    FAQ and troubleshooting
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../contributing.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../citing.html">
+    Citing
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Urban-GeoInformatics/entityraster" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/entityraster/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../comparison.html">
+    How it compares
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../faq.html">
+    FAQ and troubleshooting
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../citing.html">
+    Citing
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Urban-GeoInformatics/entityraster" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/entityraster/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedding.html">Attaching rasters to a table: <code class="docutils literal notranslate"><span class="pre">embed</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_raster.html">One entity’s raster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="per_entity.html">One value per entity: the column accessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="across_entities.html">Combining entities: surfaces, stacks and overlap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weighted_landuse.html">Weighted analysis and land use</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Alignment: rasters that do not line up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">Saving and loading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_and_pandas.html">Missing rasters and everyday pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defaults.html">Defaults policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending: backends and generators</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">User guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Alignment: rasters that do not line up</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="alignment-rasters-that-do-not-line-up">
+<h1>Alignment: rasters that do not line up<a class="headerlink" href="#alignment-rasters-that-do-not-line-up" title="Link to this heading">#</a></h1>
+<p>To combine rasters they must share a <strong>coordinate system (CRS)</strong>, a <strong>cell size</strong> and an <strong>origin</strong> (the cells’ grid positions). <code class="docutils literal notranslate"><span class="pre">entityraster</span></code> checks this and, if anything
+differs, <strong>stops and names the rows and the difference</strong> instead of silently pasting arrays together. You then opt in to the fix you want.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>the rasters differ in</p></th>
+<th class="head"><p>you get an error unless you pass</p></th>
+<th class="head"><p>what happens</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CRS</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">reproject=True</span></code></p></td>
+<td><p>the raster is warped to the reference CRS</p></td>
+</tr>
+<tr class="row-odd"><td><p>cell size</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">resampling=&quot;nearest&quot;</span></code> (or <code class="docutils literal notranslate"><span class="pre">&quot;bilinear&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;average&quot;</span></code>, …)</p></td>
+<td><p>the raster is resampled to the reference cell size</p></td>
+</tr>
+<tr class="row-even"><td><p>origin (sub-cell offset)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">snap=True</span></code> or <code class="docutils literal notranslate"><span class="pre">resampling=...</span></code></p></td>
+<td><p>shifted to the nearest cell, or resampled</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <strong>reference</strong> is the first raster with a value (or the grid you give, see below).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="o">,</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">er</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">entityraster</span><span class="w"> </span><span class="kn">import</span> <span class="n">synth</span>
+
+<span class="c1"># 80 people, of which one has a 100 m raster, one is in EPSG:4326 and one is shifted by a fraction of a cell</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">make_dataset</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="n">n</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">edge_cases</span><span class="o">=</span><span class="n">synth</span><span class="o">.</span><span class="n">EdgeCases</span><span class="p">(</span><span class="n">res100</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">epsg4326</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offgrid</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">col</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">people</span><span class="p">[</span><span class="s2">"activity_space"</span><span class="p">]</span>
+<span class="n">data</span><span class="o">.</span><span class="n">edge_ids</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'res100': [59],
+ 'epsg4326': [44],
+ 'offgrid': [17],
+ 'missing': [],
+ 'all_nodata': []}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="find-the-problem-before-it-bites">
+<h2>Find the problem before it bites<a class="headerlink" href="#find-the-problem-before-it-bites" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">compatible</span><span class="p">()</span>
+<span class="n">check</span><span class="p">[</span><span class="o">~</span><span class="n">check</span><span class="p">[</span><span class="s2">"compatible"</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>compatible</th>
+      <th>reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>17</th>
+      <td>False</td>
+      <td>origin is off the lattice by (17, 23) CRS units</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>False</td>
+      <td>CRS EPSG:4326 differs from EPSG:3067</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>False</td>
+      <td>resolution 100x100 differs from 50x50</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="what-the-error-looks-like">
+<h2>What the error looks like<a class="headerlink" href="#what-the-error-looks-like" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">col</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">er</span><span class="o">.</span><span class="n">AlignmentError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 of 80 rasters are incompatible with the reference lattice (CRS=EPSG:3067, res=50x50):
+  row 17: origin is off the lattice by (17, 23) CRS units (pass snap=True to shift it to the nearest cell, or resampling=... to resample it)
+  row 44: CRS EPSG:4326 differs from EPSG:3067 (pass reproject=True to warp it)
+  row 59: resolution 100x100 differs from 50x50 (pass resampling='nearest'|'bilinear'|... to resample it)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="choose-the-fix">
+<h2>Choose the fix<a class="headerlink" href="#choose-the-fix" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">,</span> <span class="n">resampling</span><span class="o">=</span><span class="s2">"bilinear"</span><span class="p">,</span> <span class="n">reproject</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fixed</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(563, 560)
+</pre></div>
+</div>
+</div>
+</div>
+<p>If only the origin is off, <code class="docutils literal notranslate"><span class="pre">snap=True</span></code> is cheaper than resampling (it just shifts to the nearest cell). Compatible rasters are never resampled:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ok</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">~</span><span class="n">check</span><span class="p">[</span><span class="s2">"compatible"</span><span class="p">]])</span>
+<span class="n">ok</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>                         <span class="c1"># no options needed: all rasters are compatible</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(563, 560)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="choose-the-grid-yourself">
+<h2>Choose the grid yourself<a class="headerlink" href="#choose-the-grid-yourself" title="Link to this heading">#</a></h2>
+<p>By default the result is on the <strong>union</strong> of all extents. Other choices:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">union</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ok</span><span class="o">.</span><span class="n">array</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"union of all rasters:"</span><span class="p">,</span> <span class="n">union</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s2">"| cell size:"</span><span class="p">,</span> <span class="n">union</span><span class="o">.</span><span class="n">res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>union of all rasters: (563, 560) | cell size: (50.0, 50.0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <strong>intersection</strong> is the area <em>every</em> raster covers. For rasters that do not overlap it is empty, and you get an error:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">er</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ok</span><span class="o">.</span><span class="n">array</span><span class="p">[:</span><span class="mi">5</span><span class="p">]))</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"ValueError:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ValueError: the rasters have an empty intersection
+</pre></div>
+</div>
+</div>
+</div>
+<p>For two people whose rasters do overlap (found with <code class="xref py py-meth docutils literal notranslate"><span class="pre">overlap</span></code>) it is the shared area:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pair</span> <span class="o">=</span> <span class="n">ok</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="s2">"jaccard"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"value"</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">two</span> <span class="o">=</span> <span class="n">ok</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">pair</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">pair</span><span class="o">.</span><span class="n">j</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"shared area grid:"</span><span class="p">,</span> <span class="n">er</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">two</span><span class="o">.</span><span class="n">array</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">two</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="s2">"intersection"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>         <span class="c1"># both layers cropped to the area both cover</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>shared area grid: (51, 55)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2, 51, 55)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Or pass a grid you built, for example to match another map:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mine</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">from_bounds</span><span class="p">(</span><span class="n">union</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="p">(</span><span class="n">union</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">union</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">union</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">,</span> <span class="n">union</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">),</span> <span class="mf">50.0</span><span class="p">)</span>
+<span class="n">ok</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">mine</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(100, 100)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="alignment-is-also-checked-for-environment-layers">
+<h2>Alignment is also checked for environment layers<a class="headerlink" href="#alignment-is-also-checked-for-environment-layers" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">exposure</span></code>, <code class="docutils literal notranslate"><span class="pre">composition</span></code> and <code class="docutils literal notranslate"><span class="pre">zonal_composition</span></code> align the environment (or weight) layer to each raster the same way; pass <code class="docutils literal notranslate"><span class="pre">resampling=</span></code> etc. there too.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">coarse</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">RasterRef</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">"rasters"</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"p</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">edge_ids</span><span class="p">[</span><span class="s1">'res100'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.tif"</span><span class="p">))</span>     <span class="c1"># a 100 m raster used as the layer</span>
+    <span class="n">col</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">exposure</span><span class="p">(</span><span class="n">coarse</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">er</span><span class="o">.</span><span class="n">AlignmentError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 of 1 rasters are incompatible with the reference lattice (CRS=EPSG:3067, res=50x50):
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="weighted_landuse.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Weighted analysis and land use</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="io.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Saving and loading</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#find-the-problem-before-it-bites">Find the problem before it bites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-error-looks-like">What the error looks like</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-the-fix">Choose the fix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-the-grid-yourself">Choose the grid yourself</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alignment-is-also-checked-for-environment-layers">Alignment is also checked for environment layers</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/alignment.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, entityraster developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
