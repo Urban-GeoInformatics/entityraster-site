@@ -557,6 +557,9 @@ uv<span class="w"> </span>sync<span class="w">            </span><span class="c1
 uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w">          </span><span class="c1"># run the test suite</span>
 </pre></div>
 </div>
+<p>If the project lives on a volume that creates macOS <code class="docutils literal notranslate"><span class="pre">._*</span></code> AppleDouble files (some external/network drives), <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code> can fail with
+“RECORD file doesn’t match wheel contents”; point uv at an environment on a local disk:
+<code class="docutils literal notranslate"><span class="pre">UV_PROJECT_ENVIRONMENT=$HOME/.venvs/entityraster</span> <span class="pre">UV_LINK_MODE=copy</span> <span class="pre">uv</span> <span class="pre">sync</span></code>.</p>
 </section>
 <section id="build-these-docs-locally">
 <h2>Build these docs locally<a class="headerlink" href="#build-these-docs-locally" title="Link to this heading">#</a></h2>

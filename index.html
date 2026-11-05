@@ -23,21 +23,31 @@
   ul.feat { padding-left: 1.2rem; } ul.feat li { margin: .35rem 0; }
   .note { color: var(--muted); font-size: .92rem; border-left: 3px solid var(--line); padding-left: .8rem; margin-top: 2rem; }
   footer { color: var(--muted); font-size: .88rem; margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .93rem; margin: .75rem 0; }
+  th, td { text-align: left; vertical-align: top; padding: .5rem .6rem; border-bottom: 1px solid var(--line); }
+  th { font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+  .status { display:inline-block; font-size:.85rem; font-weight:600; color: var(--accent); border:1px solid var(--accent); border-radius:999px; padding:.1rem .6rem; margin: 0 0 1rem; }
+  dl.docs dt { font-weight: 600; margin-top: .6rem; } dl.docs dd { margin: 0 0 0 0; color: var(--muted); }
+  blockquote { margin: .75rem 0; padding-left: .8rem; border-left: 3px solid var(--line); color: var(--muted); }
 </style>
 </head>
 <body>
 <main>
   <h1>entityraster</h1>
   <p class="tag">Raster-valued attributes for GeoPandas. One raster per row, handled like any other column.</p>
+  <span class="status">v0.1.0 &middot; released 5 November 2026 &middot; alpha</span>
 
   <ul class="links">
     <li><a href="https://entityraster.readthedocs.io">Documentation</a></li>
-    <li><a href="https://github.com/Urban-GeoInformatics/entityraster">GitHub</a></li>
+    <li><a href="https://entityraster.readthedocs.io/en/latest/getting_started.html">Getting started</a></li>
     <li><a href="https://pypi.org/project/entityraster/">PyPI</a></li>
+    <li><a href="https://github.com/Urban-GeoInformatics/entityraster">GitHub</a></li>
+    <li><a href="https://entityraster.readthedocs.io/en/latest/changelog.html">Changelog</a></li>
   </ul>
 
   <p>Keep a person's activity space, a site's suitability surface or a parcel's land-cover map in a table, next to the entity's other attributes. Filter, group, join and save it
-  the way you already do with tables. We call such a table a <strong>GeoRasterFrame</strong>.</p>
+  the way you already do with tables. We call such a table a <strong>GeoRasterFrame</strong>: an ordinary (Geo)DataFrame in which one column has the pandas dtype <code>raster</code>.</p>
 
 <pre><code>import entityraster as er
 
@@ -49,21 +59,69 @@ gdf["area_km2"] = gdf["activity_space"].raster.area(0.5, relative=True) / 1e6
 old = gdf[gdf["age"] &gt; 60]                                             # rasters follow the filter
 old.rst.surface("activity_space", by="gender", outside="unknown")      # a mean surface per group</code></pre>
 
+  <h2>Why a raster column?</h2>
+  <p>The usual way to work with one raster per person is a <code>path</code> column and a hand-written loop that opens each file, aligns arrays, accumulates results and merges them back.
+  That is long, and it is where silent errors hide: rasters with different origins stacked as if they were aligned, cells outside a raster treated as zero or as missing without anyone deciding.
+  <code>entityraster</code> keeps a reference to each raster, with its metadata, in the table, reads pixels only when needed, refuses to guess when rasters do not line up,
+  and makes you state what cells outside a raster mean.</p>
+
   <h2>What it does</h2>
   <ul class="feat">
-    <li><strong>Attach rasters by key</strong> (<code>embed</code>): catalogue, file-name pattern, folder, path column. Unmatched rows and unused files are reported, never silently dropped. </li>
+    <li><strong>Attach rasters by key</strong> (<code>embed</code>): catalogue, file-name pattern or template, folder, path column. Unmatched rows, duplicate keys and unused files are reported, never silently dropped.</li>
     <li><strong>Lazy.</strong> The table holds references and metadata; pixels are read only for the rows an operation needs.</li>
-    <li><strong>Rasters with different extents</strong> are aligned with strict, explained rules (<code>reproject=</code>, <code>resampling=</code>, <code>snap=</code> are opt-in).</li>
-    <li><strong>Zero or unknown?</strong> Operations across entities make you state what a cell outside a raster means.</li>
-    <li><strong>Weighted analysis and land use:</strong> exposure weighted by each entity's raster, class shares per entity and per polygon.</li>
-    <li><strong>Plain pandas:</strong> filter, groupby, merge, sjoin and GeoParquet keep working; export surfaces as GeoTIFF for QGIS and ArcGIS.</li>
+    <li><strong>Per entity, every entity, across entities:</strong> <code>gdf.loc[uid, col].mean()</code>, <code>gdf[col].raster.area()</code> as a column, <code>gdf.rst.surface(col, by="group", outside=...)</code> as a map per group.</li>
+    <li><strong>Rasters with different extents</strong> are aligned with strict, explained rules; <code>reproject=</code>, <code>resampling=</code> and <code>snap=</code> are opt-in, and errors name the rows and the fix.</li>
+    <li><strong>Weighted analysis and land use:</strong> exposure weighted by each entity's raster, class shares per entity, and <code>zonal_composition</code> for one land-use map over many polygons.</li>
+    <li><strong>Plain pandas:</strong> filter, groupby, merge, concat, sjoin, to_crs and dissolve keep working; save to GeoParquet with references; export surfaces as GeoTIFF for QGIS and ArcGIS.</li>
   </ul>
 
-  <h2>Install</h2>
-<pre><code>pip install entityraster</code></pre>
-  <p>Python 3.11 or newer. BSD 3-Clause licence.</p>
+  <h2>Zero or unknown?</h2>
+  <p>Every operation across entities requires <code>outside="zero"</code> or <code>outside="unknown"</code>. Leaving it out is an error, because the choice changes the numbers.</p>
+  <div class="table-wrap"><table>
+    <tr><th></th><th><code>outside="zero"</code></th><th><code>outside="unknown"</code></th></tr>
+    <tr><td>a cell outside an entity's raster</td><td>known to be 0: never there</td><td>not observed</td></tr>
+    <tr><td>mean surface</td><td>divides by all entities</td><td>divides by entities that observed the cell</td></tr>
+    <tr><td>exposure to an environment layer</td><td>missing cells count as 0</td><td>dropped from numerator and denominator</td></tr>
+    <tr><td>overlap of two entities that do not meet</td><td>exactly 0</td><td>undefined (NaN)</td></tr>
+  </table></div>
 
-  <p class="note">Status: pre-release (0.1). Links above go live when the documentation project and the first release are published.</p>
+  <h2>Is it the right tool?</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Your job</th><th>Use</th></tr>
+    <tr><td>One raster per entity, different extents, kept with the entity's attributes</td><td><code>entityraster</code></td></tr>
+    <tr><td>One shared raster, many polygons (zonal statistics)</td><td>rasterstats, exactextract, or <code>er.zonal_composition</code></td></tr>
+    <tr><td>A stack of aligned rasters (time series, data cube)</td><td>xarray / rioxarray</td></tr>
+    <tr><td>Very large collections in a SQL engine</td><td>SedonaDB, Apache Sedona, PostGIS raster</td></tr>
+  </table></div>
+  <p>Measured against a rasterio loop and idiomatic xarray on five tasks: 7 lines instead of 121 and 62, about the same speed as the loop, and the only one of the three that stops on misaligned rasters without hand-written checks.
+  Details in <a href="https://entityraster.readthedocs.io/en/latest/comparison.html">How it compares</a>.</p>
+
+  <h2>Install</h2>
+<pre><code>pip install entityraster
+pip install "entityraster[explore]"    # + folium / mapclassify for interactive maps</code></pre>
+  <p>Python 3.11 or newer; tested on 3.11&ndash;3.13 on Linux, macOS and Windows. BSD 3-Clause licence.</p>
+
+  <h2>Documentation</h2>
+  <dl class="docs">
+    <dt><a href="https://entityraster.readthedocs.io/en/latest/getting_started.html">Getting started</a></dt><dd>Install it and run a first analysis on a synthetic city in five minutes.</dd>
+    <dt><a href="https://entityraster.readthedocs.io/en/latest/user_guide/index.html">User guide</a></dt><dd>Concepts, attaching rasters, per-person results, group surfaces, alignment, land use and weights, input/output, defaults.</dd>
+    <dt><a href="https://entityraster.readthedocs.io/en/latest/gallery/index.html">Examples</a></dt><dd>Activity spaces, weighted exposure and land-use composition, worked end to end with real output.</dd>
+    <dt><a href="https://entityraster.readthedocs.io/en/latest/api/index.html">API reference</a></dt><dd>Every public function, class and method.</dd>
+    <dt><a href="https://entityraster.readthedocs.io/en/latest/faq.html">FAQ</a> and <a href="https://entityraster.readthedocs.io/en/latest/glossary.html">glossary</a></dt><dd>Common problems and plain-language definitions.</dd>
+  </dl>
+
+  <h2>Limitations</h2>
+  <ul class="feat">
+    <li>Evaluated on synthetic data; not yet benchmarked on large real collections.</li>
+    <li>North-up GeoTIFFs, one band per reference; single process, no parallelism.</li>
+    <li>The table stores file paths: moving the files breaks the references.</li>
+  </ul>
+
+  <h2>Cite</h2>
+  <blockquote>Hasanzadeh, K. (2026). <em>entityraster: raster-valued attributes for GeoPandas</em> (version 0.1.0) [Computer software]. https://github.com/Urban-GeoInformatics/entityraster</blockquote>
+  <p>A software article is in preparation. See <a href="https://entityraster.readthedocs.io/en/latest/citing.html">Citing</a>.</p>
+
+  <p class="note">Status: alpha (0.1.0). The API may still change; please report problems on <a href="https://github.com/Urban-GeoInformatics/entityraster/issues">GitHub</a>.</p>
 
   <footer>Urban Geoinformatics &middot; <a href="https://github.com/Urban-GeoInformatics">github.com/Urban-GeoInformatics</a></footer>
 </main>
