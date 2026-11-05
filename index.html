@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>entityraster</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:image" content="https://urban-geoinformatics.github.io/entityraster-site/apple-touch-icon.png">
 <meta name="description" content="Raster-valued attributes for GeoPandas: one raster per row, with explicit zero-vs-unknown semantics.">
 <style>
   :root { --bg:#ffffff; --fg:#1b1f24; --muted:#586069; --line:#d8dee4; --accent:#0b6e4f; --code:#f4f6f8; }
@@ -30,11 +33,13 @@
   .status { display:inline-block; font-size:.85rem; font-weight:600; color: var(--accent); border:1px solid var(--accent); border-radius:999px; padding:.1rem .6rem; margin: 0 0 1rem; }
   dl.docs dt { font-weight: 600; margin-top: .6rem; } dl.docs dd { margin: 0 0 0 0; color: var(--muted); }
   blockquote { margin: .75rem 0; padding-left: .8rem; border-left: 3px solid var(--line); color: var(--muted); }
+  h1.brand { display:flex; align-items:center; gap:.75rem; }
+  h1.brand img { flex: none; }
 </style>
 </head>
 <body>
 <main>
-  <h1>entityraster</h1>
+  <h1 class="brand"><img src="logo.svg" alt="" width="56" height="56">entityraster</h1>
   <p class="tag">Raster-valued attributes for GeoPandas. One raster per row, handled like any other column.</p>
   <span class="status">v0.1.0 &middot; released 5 November 2026 &middot; alpha</span>
 
